@@ -54,6 +54,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
+import com.dongyang.config.TConfig;
+
 import chrriis.common.NetworkURLClassLoader;
 import chrriis.common.SystemProperty;
 import chrriis.common.Utils;
@@ -849,7 +851,7 @@ public class SWTNativeInterface extends NativeInterface implements ISWTNativeInt
       if(SWTNativeInterface.class.getClassLoader() != NativeInterface.class.getClassLoader()) {
         WebServer.getDefaultWebServer().addReferenceClassLoader(SWTNativeInterface.class.getClassLoader());
       }
-      referenceList.add("org/eclipse/swt/widgets/Display.class");
+      referenceList.add(Display.class);
       optionalReferenceList.add("org/mozilla/xpcom/Mozilla.class");
       optionalReferenceList.add("org/mozilla/interfaces/nsIWebBrowser.class");
       for(String optionalReference: optionalReferenceList) {
@@ -884,30 +886,35 @@ public class SWTNativeInterface extends NativeInterface implements ISWTNativeInt
           }
         }
       }
+//      if(isProxyClassLoaderUsed) {
+//        // We set only one item in the classpath: the path to the proxy class loader.
+//        classPathList.clear();
+//        File classPathFile = new File(SystemProperty.JAVA_IO_TMPDIR.get(), ".djnativeswing/classpath");
+//        Utils.deleteAll(classPathFile);
+//        String classPath = NetworkURLClassLoader.class.getName().replace('.', '/') + ".class";
+//        File mainClassFile = new File(classPathFile, classPath);
+//        mainClassFile.getParentFile().mkdirs();
+//        if(!mainClassFile.exists()) {
+//          try {
+//            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(mainClassFile));
+//            BufferedInputStream in = new BufferedInputStream(SWTNativeInterface.class.getResourceAsStream("/" + classPath));
+//            byte[] bytes = new byte[1024];
+//            for(int n; (n=in.read(bytes)) != -1; out.write(bytes, 0, n)) {
+//            }
+//            in.close();
+//            out.close();
+//          } catch(Exception e) {
+//            e.printStackTrace();
+////            throw new IllegalStateException("Cannot find a suitable classpath to spawn VM!");
+//          }
+//          mainClassFile.deleteOnExit();
+//        }
+//        classPathList.add(classPathFile.getAbsolutePath());
+//      }
       if(isProxyClassLoaderUsed) {
-        // We set only one item in the classpath: the path to the proxy class loader.
-        classPathList.clear();
-        File classPathFile = new File(SystemProperty.JAVA_IO_TMPDIR.get(), ".djnativeswing/classpath");
-        Utils.deleteAll(classPathFile);
-        String classPath = NetworkURLClassLoader.class.getName().replace('.', '/') + ".class";
-        File mainClassFile = new File(classPathFile, classPath);
-        mainClassFile.getParentFile().mkdirs();
-        if(!mainClassFile.exists()) {
-          try {
-            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(mainClassFile));
-            BufferedInputStream in = new BufferedInputStream(SWTNativeInterface.class.getResourceAsStream("/" + classPath));
-            byte[] bytes = new byte[1024];
-            for(int n; (n=in.read(bytes)) != -1; out.write(bytes, 0, n)) {
-            }
-            in.close();
-            out.close();
-          } catch(Exception e) {
-            e.printStackTrace();
-//            throw new IllegalStateException("Cannot find a suitable classpath to spawn VM!");
-          }
-          mainClassFile.deleteOnExit();
-        }
-        classPathList.add(classPathFile.getAbsolutePath());
+    	  classPathList.add(TConfig.getSystemValue("DJNativeSwing_url") + "\\DJNativeSwing.jar");
+          classPathList.add(TConfig.getSystemValue("DJNativeSwing_url") + "\\DJNativeSwing-SWT.jar");
+          classPathList.add(TConfig.getSystemValue("DJNativeSwing_url") + "\\org.eclipse.swt.win32.win32.x86_3.102.0.v20130605-1544.jar");
       }
       List<String> vmParamList = new ArrayList<String>();
       Map<String, String> systemPropertiesMap = new HashMap<String, String>();
@@ -1036,7 +1043,6 @@ public class SWTNativeInterface extends NativeInterface implements ISWTNativeInt
       }
       Exception exception = null;
       Socket socket = null;
-      long peerVMConnectionTimeout = Integer.parseInt(NSSystemPropertySWT.INTERFACE_OUTPROCESS_CONNECTIONTIMEOUT.get("10000"));
       long startTime = System.currentTimeMillis();
       do {
         if(p != null) {
@@ -1059,7 +1065,7 @@ public class SWTNativeInterface extends NativeInterface implements ISWTNativeInt
           Thread.sleep(200);
         } catch(Exception e) {
         }
-      } while(System.currentTimeMillis() - startTime < peerVMConnectionTimeout);
+      } while(System.currentTimeMillis() - startTime < 10000);
       if(socket == null) {
         if(p != null) {
           p.destroy();

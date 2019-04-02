@@ -22,6 +22,8 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractButton;
@@ -80,11 +82,50 @@ public class DefaultWebBrowserDecorator extends WebBrowserDecorator {
     STATUS_LABEL,
   }
 
-  private final ResourceBundle RESOURCES;
+  private final Map<String, String> RESOURCES;
 
   {
-    String className = JWebBrowser.class.getName();
-    RESOURCES = ResourceBundle.getBundle(className.substring(0, className.lastIndexOf('.')).replace('.', '/') + "/resource/WebBrowser");
+	  RESOURCES = new HashMap<String, String>();
+	  RESOURCES.put("BrowserIcon", "resource/internal_browser.gif");
+	  RESOURCES.put("BrowserTitle", "{0} - JWebBrowser");
+	  RESOURCES.put("GoIcon", "resource/nav_go.gif");
+	  RESOURCES.put("GoText", "Go to the location specified in the Location Bar");
+	  RESOURCES.put("BackIcon", "resource/nav_backward.gif");
+	  RESOURCES.put("BackText", "Go back one page");
+	  RESOURCES.put("ForwardIcon", "resource/nav_forward.gif");
+	  RESOURCES.put("ForwardText", " Go forward one page");
+	  RESOURCES.put("ReloadIcon", "resource/nav_refresh.gif");
+	  RESOURCES.put("ReloadText", "Reload current page");
+	  RESOURCES.put("StopIcon", "resource/nav_stop.gif");
+	  RESOURCES.put("StopText", "Stop loading this page");
+	  RESOURCES.put("FileMenu", "File");
+	  RESOURCES.put("FileNewWindowMenu", "New Window");
+	  RESOURCES.put("FileOpenFileMenu", "Open File...");
+	  RESOURCES.put("FileOpenLocationMenu", "Open Location...");
+	  RESOURCES.put("FileOpenLocationDialogTitle", "Open Location");
+	  RESOURCES.put("FileOpenLocationDialogMessage", "Please enter the location to open:");
+	  RESOURCES.put("FileCloseMenu", "Close");
+	  RESOURCES.put("ViewMenu", "View");
+	  RESOURCES.put("ViewToolbarsMenu", "Toolbars");
+	  RESOURCES.put("ViewToolbarsButtonBarMenu", "Button Bar");
+	  RESOURCES.put("ViewToolbarsLocationBarMenu", "Location Bar");
+	  RESOURCES.put("ViewStatusBarMenu", "Status Bar");
+	  RESOURCES.put("ViewMenuBack", "Back");
+	  RESOURCES.put("ViewMenuForward", "Forward");
+	  RESOURCES.put("ViewMenuReload", "Reload");
+	  RESOURCES.put("ViewMenuStop", "Stop");
+	  RESOURCES.put("ViewMenuBackIcon", "resource/nav_backward.gif");
+	  RESOURCES.put("ViewMenuForwardIcon", "resource/nav_forward.gif");
+	  RESOURCES.put("ViewMenuReloadIcon", "resource/nav_refresh.gif");
+	  RESOURCES.put("ViewMenuStopIcon", "resource/nav_stop.gif");
+	  RESOURCES.put("SystemMenuBack", "Back");
+	  RESOURCES.put("SystemMenuForward", "Forward");
+	  RESOURCES.put("SystemMenuReload", "Reload");
+	  RESOURCES.put("SystemMenuStop", "Stop");
+	  RESOURCES.put("SystemMenuBackIcon", "resource/nav_backward.gif");
+	  RESOURCES.put("SystemMenuForwardIcon", "resource/nav_forward.gif");
+	  RESOURCES.put("SystemMenuReloadIcon", "resource/nav_refresh.gif");
+	  RESOURCES.put("SystemMenuStopIcon", "resource/nav_stop.gif");
   }
 
   private static class NWebBrowserListener extends WebBrowserAdapter {
@@ -741,11 +782,11 @@ public class DefaultWebBrowserDecorator extends WebBrowserDecorator {
   }
 
   protected void setWebBrowserWindowTitle(JWebBrowserWindow webBrowserWindow, String pageTitle) {
-    webBrowserWindow.setTitle(new MessageFormat(RESOURCES.getString("BrowserTitle")).format(new Object[] {pageTitle}));
+    webBrowserWindow.setTitle(new MessageFormat(RESOURCES.get("BrowserTitle")).format(new Object[] {pageTitle}));
   }
 
   protected void setWebBrowserWindowIcon(JWebBrowserWindow webBrowserWindow) {
-    String value = RESOURCES.getString("BrowserIcon");
+    String value = RESOURCES.get("BrowserIcon");
     if(value.length() > 0) {
       webBrowserWindow.setIconImage(new ImageIcon(JWebBrowserWindow.class.getResource(value)).getImage());
     }
@@ -755,7 +796,7 @@ public class DefaultWebBrowserDecorator extends WebBrowserDecorator {
    * Ask the user, by default using an option pane (input dialog), the location to open.
    */
   protected String askLocation() {
-    return JOptionPane.showInputDialog(webBrowser, RESOURCES.getString("FileOpenLocationDialogMessage"), RESOURCES.getString("FileOpenLocationDialogTitle"), JOptionPane.QUESTION_MESSAGE);
+    return JOptionPane.showInputDialog(webBrowser, RESOURCES.get("FileOpenLocationDialogMessage"), RESOURCES.get("FileOpenLocationDialogTitle"), JOptionPane.QUESTION_MESSAGE);
   }
 
   /**
@@ -763,59 +804,59 @@ public class DefaultWebBrowserDecorator extends WebBrowserDecorator {
    */
   protected void configureComponent(JComponent c, WebBrowserDecoratorComponentType componentType) {
     switch(componentType) {
-      case FILE_MENU: ((AbstractButton)c).setText(RESOURCES.getString("FileMenu")); return;
-      case FILE_NEW_WINDOW_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.getString("FileNewWindowMenu")); return;
-      case FILE_OPEN_LOCATION_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.getString("FileOpenLocationMenu")); return;
-      case FILE_OPEN_FILE_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.getString("FileOpenFileMenu")); return;
-      case FILE_CLOSE_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.getString("FileCloseMenu")); return;
-      case VIEW_MENU: ((AbstractButton)c).setText(RESOURCES.getString("ViewMenu")); return;
-      case VIEW_TOOLBARS_MENU: ((AbstractButton)c).setText(RESOURCES.getString("ViewToolbarsMenu")); return;
-      case VIEW_TOOLBARS_BUTTON_BAR_CHECKBOX_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.getString("ViewToolbarsButtonBarMenu")); return;
-      case VIEW_TOOLBARS_LOCATION_BAR_CHECKBOX_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.getString("ViewToolbarsLocationBarMenu")); return;
-      case VIEW_STATUS_BAR_CHECKBOX_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.getString("ViewStatusBarMenu")); return;
+      case FILE_MENU: ((AbstractButton)c).setText(RESOURCES.get("FileMenu")); return;
+      case FILE_NEW_WINDOW_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.get("FileNewWindowMenu")); return;
+      case FILE_OPEN_LOCATION_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.get("FileOpenLocationMenu")); return;
+      case FILE_OPEN_FILE_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.get("FileOpenFileMenu")); return;
+      case FILE_CLOSE_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.get("FileCloseMenu")); return;
+      case VIEW_MENU: ((AbstractButton)c).setText(RESOURCES.get("ViewMenu")); return;
+      case VIEW_TOOLBARS_MENU: ((AbstractButton)c).setText(RESOURCES.get("ViewToolbarsMenu")); return;
+      case VIEW_TOOLBARS_BUTTON_BAR_CHECKBOX_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.get("ViewToolbarsButtonBarMenu")); return;
+      case VIEW_TOOLBARS_LOCATION_BAR_CHECKBOX_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.get("ViewToolbarsLocationBarMenu")); return;
+      case VIEW_STATUS_BAR_CHECKBOX_MENU_ITEM: ((AbstractButton)c).setText(RESOURCES.get("ViewStatusBarMenu")); return;
       case VIEW_BACK_MENU_ITEM: {
-        ((AbstractButton)c).setText(RESOURCES.getString("ViewMenuBack"));
+        ((AbstractButton)c).setText(RESOURCES.get("ViewMenuBack"));
         ((AbstractButton)c).setIcon(createIcon("ViewMenuBackIcon"));
         return;
       }
       case VIEW_FORWARD_MENU_ITEM: {
-        ((AbstractButton)c).setText(RESOURCES.getString("ViewMenuForward"));
+        ((AbstractButton)c).setText(RESOURCES.get("ViewMenuForward"));
         ((AbstractButton)c).setIcon(createIcon("ViewMenuForwardIcon"));
         return;
       }
       case VIEW_RELOAD_MENU_ITEM: {
-        ((AbstractButton)c).setText(RESOURCES.getString("ViewMenuReload"));
+        ((AbstractButton)c).setText(RESOURCES.get("ViewMenuReload"));
         ((AbstractButton)c).setIcon(createIcon("ViewMenuReloadIcon"));
         return;
       }
       case VIEW_STOP_MENU_ITEM: {
-        ((AbstractButton)c).setText(RESOURCES.getString("ViewMenuStop"));
+        ((AbstractButton)c).setText(RESOURCES.get("ViewMenuStop"));
         ((AbstractButton)c).setIcon(createIcon("ViewMenuStopIcon"));
         return;
       }
       case BACK_BUTTON: {
         ((AbstractButton)c).setIcon(createIcon("BackIcon"));
-        ((AbstractButton)c).setToolTipText(RESOURCES.getString("BackText"));
+        ((AbstractButton)c).setToolTipText(RESOURCES.get("BackText"));
         return;
       }
       case FORWARD_BUTTON: {
         ((AbstractButton)c).setIcon(createIcon("ForwardIcon"));
-        ((AbstractButton)c).setToolTipText(RESOURCES.getString("ForwardText"));
+        ((AbstractButton)c).setToolTipText(RESOURCES.get("ForwardText"));
         return;
       }
       case RELOAD_BUTTON: {
         ((AbstractButton)c).setIcon(createIcon("ReloadIcon"));
-        ((AbstractButton)c).setToolTipText(RESOURCES.getString("ReloadText"));
+        ((AbstractButton)c).setToolTipText(RESOURCES.get("ReloadText"));
         return;
       }
       case STOP_BUTTON: {
         ((AbstractButton)c).setIcon(createIcon("StopIcon"));
-        ((AbstractButton)c).setToolTipText(RESOURCES.getString("StopText"));
+        ((AbstractButton)c).setToolTipText(RESOURCES.get("StopText"));
         return;
       }
       case GO_BUTTON: {
         ((AbstractButton)c).setIcon(createIcon("GoIcon"));
-        ((AbstractButton)c).setToolTipText(RESOURCES.getString("GoText"));
+        ((AbstractButton)c).setToolTipText(RESOURCES.get("GoText"));
         return;
       }
       case STATUS_LABEL:
@@ -825,8 +866,7 @@ public class DefaultWebBrowserDecorator extends WebBrowserDecorator {
   }
 
   private Icon createIcon(String resourceKey) {
-    String value = RESOURCES.getString(resourceKey);
-    return value.length() == 0? null: new ImageIcon(JWebBrowser.class.getResource(value));
+	  return null;
   }
 
 }
